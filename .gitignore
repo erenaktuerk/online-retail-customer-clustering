@@ -1,0 +1,42 @@
+# Byte-compiled / optimized / DLL files
+_pycache_/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.cache
+nosetests.xml
+coverage.xml
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# Data files (raw, processed, results)
+data/raw/
+data/processed/
+results/
+
+# Saved models
+models/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Sensitive files
+.kaggle/
