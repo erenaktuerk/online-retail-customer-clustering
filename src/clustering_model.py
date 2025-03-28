@@ -1,32 +1,41 @@
-"""
-Module for clustering models.
-Provides the ClusteringModel class to perform clustering using KMeans.
-"""
-
 from sklearn.cluster import KMeans
+import pandas as pd
 
 class ClusteringModel:
-    def _init_(self, n_clusters=3, random_state=42):
+    def __init__(self, n_clusters=3):
         """
-        Initialize the ClusteringModel with the specified number of clusters.
+        Initialize the clustering model with the number of clusters.
+        Args:
+            n_clusters (int): Number of clusters for KMeans.
         """
         self.n_clusters = n_clusters
-        self.model = KMeans(n_clusters=n_clusters, random_state=random_state)
+        self.model = KMeans(n_clusters=self.n_clusters)
 
-    def fit(self, X):
+    def fit(self, df):
         """
-        Fit the clustering model.
+        Fit the clustering model on the data.
         Args:
-            X (pd.DataFrame or array-like): The data to fit.
+            df (pd.DataFrame): Data to be clustered.
         """
-        self.model.fit(X)
+        self.model.fit(df)
+        # Cluster-Zugehörigkeit zu den Daten hinzufügen
+        df['Cluster'] = self.model.labels_
+        
+        # Cluster-Profile berechnen (Durchschnittswerte je Cluster)
+        cluster_profiles = df.groupby('Cluster').mean()
+        
+        # Cluster-Profile ausgeben
+        print("\nCluster Profiles (Durchschnittswerte je Cluster):")
+        print(cluster_profiles)
+        
+        return df
 
-    def predict(self, X):
+    def predict(self, df):
         """
-        Predict cluster labels for the given data.
+        Predict the cluster labels for the data.
         Args:
-            X (pd.DataFrame or array-like): Data for prediction.
+            df (pd.DataFrame): Data to predict the clusters.
         Returns:
-            labels (array): Predicted cluster labels.
+            cluster_labels (array): Predicted cluster labels.
         """
-        return self.model.predict(X)
+        return self.model.predict(df)

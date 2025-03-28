@@ -6,25 +6,29 @@ import pandas as pd
 
 def main():
     # Step 1: Data Loading and Preprocessing
-    data_path = 'data/raw/OnlineRetail.csv'  # Adjust filename as necessary
+    data_path = 'data/raw/OnlineRetail.csv'
     preprocessor = DataPreprocessor(data_path)
-    df = preprocessor.load_data()
-    df_clean = preprocessor.clean_data(df)
-    df_processed = preprocessor.transform_data(df_clean)
+
+    # Load data in chunks
+    chunks = preprocessor.load_data()
     
-    # Save processed data
-    df_processed.to_csv('data/processed/processed_data.csv', index=False)
-    
-    # Step 2: Clustering
+    # Process each chunk
+    for chunk in chunks:
+        df_clean = preprocessor.clean_data(chunk)
+        df_processed = preprocessor.transform_data(df_clean)
+        
+        # Weiterverarbeiten, Speichern oder Clustering für jedes Chunk
+        # z.B. Data speichern oder aggregieren
+        
+    # Step 2: Clustering and further processing (as in the original code)
     clustering = ClusteringModel(n_clusters=3)
-    clustering.fit(df_processed)
-    cluster_labels = clustering.predict(df_processed)
-    df_processed['Cluster'] = cluster_labels
+    df_with_clusters = clustering.fit(df_processed)  # Gibt df_with_clusters mit Cluster-Spalte zurück
     
-    # Save clustering output
-    df_processed.to_csv('results/clustering_output.csv', index=False)
+    # Hier wird das Cluster-Profil direkt nach dem Clustering angezeigt
+    # (bereits in der fit-Methode des ClusteringModel integriert)
     
     # Step 3: Evaluation
+    cluster_labels = df_with_clusters['Cluster'].values  # Cluster Labels holen
     evaluator = Evaluation()
     score = evaluator.calculate_silhouette(df_processed.drop('Cluster', axis=1), cluster_labels)
     print(f"Silhouette Score: {score:.3f}")
